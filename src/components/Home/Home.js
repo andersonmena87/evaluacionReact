@@ -14,10 +14,33 @@ const styles = {
         color: 'white',
         textAlign: 'center',
         fontSize: '20px'
-    }, 
-    area: {
-        backgroundColor: '#FFFFFF'
     }
+}
+
+const calculateLatitude = latitude => {
+    const grade = parseFloat((latitude / 180) * 523, 10);
+    return 261.5 - (grade);
+}
+
+const calculateLongitude = longitude => {
+    //const grade = parseFloat((longitude / 360) * 1024, 10);
+    const grade = parseFloat((longitude / 360) * 1006, 10);
+    return 512 + (grade);
+}
+
+const colorPoint = alture => {
+    alture = parseInt(alture, 10);
+    let color = "";
+
+    if(alture < 1000) {
+        color = "green";
+    }else if(alture > 30000){
+        color = "red";
+    }else{
+        color = "yellow";
+    }
+
+    return color;
 }
 
 const Home = ({ aircrafts }) => {
@@ -48,12 +71,22 @@ const Home = ({ aircrafts }) => {
                     <Row>
                         <Col>
                             <FormItem>
-                                <img src={mapa} usemap="#planetmap" />
-                                <map name="planetmap">
-                                    <area style={styles.area} shape="rect" coords="6.2530408,-75.56457369999998" alt="Sun" />
-                                    <area style={styles.area} shape="circle" coords="90,58,3" alt="Mercury" />
-                                    <area style={styles.area} shape="circle" coords="124,58,8" alt="Venus" />
-                                </map>
+                                <div style={{ position: "relative" }}>
+                                    <img className="map" src={mapa} />
+                                    {
+                                        aircrafts.map((aircraft, index) => {
+                                            const stylesPoint = {
+                                                top: calculateLatitude(aircraft.Lat),
+                                                left: calculateLongitude(aircraft.Long),
+                                                width: "8px",
+                                                height: "8px",
+                                                background: colorPoint(aircraft.Alt),
+                                                borderRadius: "50%",
+                                                position: "absolute"
+                                            }
+                                            return <div key={`${aircraft.Id + '' + index}`} data-latitud={aircraft.Lat} data-longitud={aircraft.Long} data-altura={aircraft.Alt} style={stylesPoint}></div>
+                                        })}
+                                </div>
                             </FormItem>
                         </Col>
                     </Row>

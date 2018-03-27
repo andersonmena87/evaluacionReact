@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 
 const reducer = (state, action) => {
   if(action.type === "AIRCRAFTS_SUCCESS") {
+    let count = 0;
     return {
       ...state,
       aircrafts: action.aircrafts.filter((arr) => {
-        return arr.Lat && arr.Long
+          count ++;
+          return arr.Lat && arr.Long && arr.Id && count < 1000;
       })
     };
   }
