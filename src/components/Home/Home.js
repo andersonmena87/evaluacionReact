@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import mapa from '../../source/mapaPractica.png'
 import { Form, Row, Col, Layout, Input, Button, Switch } from 'antd';
 
-import { loadAircrafts } from '../../actionCreators';
+import * as actions from '../../actionCreators';
 
 const { Header, Content } = Layout;
 const FormItem = Form.Item;
@@ -108,12 +108,4 @@ const mapStateToProps = state => {
     };
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loadAircrafts() {
-        dispatch(loadAircrafts());
-      }
-    }
-  }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, actions)(Home);
