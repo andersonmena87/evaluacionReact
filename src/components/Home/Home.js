@@ -1,21 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
 import mapa from '../../source/mapaPractica.png'
 import { Form, Row, Col, Layout, Input, Button, Switch } from 'antd';
+
+import { loadAircrafts } from '../../actionCreators';
 
 const { Header, Content } = Layout;
 const FormItem = Form.Item;
 const styles = {
     content: {
         textAlign: 'center'
-    },
-    header: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: '20px'
     }
 }
+
+const StyledHeader = styled.div `
+    color: white;
+    text-align: center;
+    font-size: 20px;
+`;
 
 const calculateLatitude = latitude => {
     const grade = parseFloat((latitude / 180) * 523, 10);
@@ -23,7 +27,6 @@ const calculateLatitude = latitude => {
 }
 
 const calculateLongitude = longitude => {
-    //const grade = parseFloat((longitude / 360) * 1024, 10);
     const grade = parseFloat((longitude / 360) * 1006, 10);
     return 512 + (grade);
 }
@@ -43,19 +46,19 @@ const colorPoint = alture => {
     return color;
 }
 
-const Home = ({ aircrafts }) => {
+const Home = ({ aircrafts, load, loadAircrafts }) => {
     return (
         <Layout>
-            <Header style={styles.header}>Evaluación</Header>
+            <Header><StyledHeader>Evaluación</StyledHeader></Header>
             <Content style={styles.content}>
                 <Form layout="inline">
                     <Row>
                         <Col>
                             <FormItem>
-                                <Input size="small" placeholder="En vuelo 0" />
+                                <Input size="small" readOnly placeholder={`En vuelo ${aircrafts.length}`} />
                             </FormItem>
                             <FormItem>
-                                <Button type="primary">Actualizar</Button>
+                                <Button loading={load} onClick={() => {loadAircrafts()}}>Actualizar</Button>
                             </FormItem>
                             <FormItem>
                                 Tiempo real: <Switch size="small" checked={false} />
@@ -75,7 +78,7 @@ const Home = ({ aircrafts }) => {
                                     <img className="map" src={mapa} />
                                     {
                                         aircrafts.map((aircraft, index) => {
-                                            const stylesPoint = {
+                                           const stylesPoint = {
                                                 top: calculateLatitude(aircraft.Lat),
                                                 left: calculateLongitude(aircraft.Long),
                                                 width: "8px",
@@ -85,6 +88,7 @@ const Home = ({ aircrafts }) => {
                                                 position: "absolute"
                                             }
                                             return <div key={`${aircraft.Id + '' + index}`} data-latitud={aircraft.Lat} data-longitud={aircraft.Long} data-altura={aircraft.Alt} style={stylesPoint}></div>
+                                            
                                         })}
                                 </div>
                             </FormItem>
@@ -99,8 +103,17 @@ const Home = ({ aircrafts }) => {
 
 const mapStateToProps = state => {
     return {
-        aircrafts: state.aircrafts
+        aircrafts: state.aircrafts,
+        load: state.load
     };
 }
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = dispatch => {
+    return {
+        loadAircrafts() {
+        dispatch(loadAircrafts());
+      }
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

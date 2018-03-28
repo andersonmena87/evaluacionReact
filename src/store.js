@@ -1,17 +1,36 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import { AIRCRAFTS_SUCCESS, AIRCRAFTS_SEARCH } from './constants/const';
 
 const reducer = (state, action) => {
-  if(action.type === "AIRCRAFTS_SUCCESS") {
+  if (action.type === AIRCRAFTS_SUCCESS) {
     let count = 0;
     return {
       ...state,
       aircrafts: action.aircrafts.filter((arr) => {
-          count ++;
-          return arr.Lat && arr.Long && arr.Id && count < 1000;
-      })
+        if (arr.Lat && arr.Long && arr.Id) {
+          count++;
+        }
+
+        //return arr.Lat && arr.Long && arr.Id && count < 1001;
+        return arr.Lat && arr.Long && arr.Id;
+      }),
+      load: false
     };
+  } else if (action.type === AIRCRAFTS_SEARCH) {
+    let count = 0;
+    return {
+      ...state,
+      aircrafts: action.aircrafts.filter((arr) => {
+        if (arr.Lat && arr.Long && arr.Id) {
+          count++;
+        }
+        return arr.Lat && arr.Long && arr.Id && count < 1001;
+      }),
+      load: false
+    }
   }
+
   return state;
 }
 
@@ -22,4 +41,4 @@ const logger = store => next => action => {
   return result;
 }
 
-export default createStore(reducer, {aircrafts: []}, applyMiddleware(logger, thunk)); 
+export default createStore(reducer, { aircrafts: [], load: true }, applyMiddleware(logger, thunk)); 
