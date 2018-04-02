@@ -46,7 +46,7 @@ const colorPoint = alture => {
     return color;
 }
 
-const Home = ({ aircrafts, aircraftsInitial, load, loadAircrafts, searchAircrafts}) => {
+const Home = ({ aircrafts, aircraftsInitial, load, loadAircrafts, searchAircrafts, limitAircrafts,  limit}) => {
     return (
         <Layout>
             <Header><StyledHeader>Evaluación</StyledHeader></Header>
@@ -61,10 +61,10 @@ const Home = ({ aircrafts, aircraftsInitial, load, loadAircrafts, searchAircraft
                                 <Button loading={load} onClick={() => {loadAircrafts()}}>Actualizar</Button>
                             </FormItem>
                             <FormItem>
-                                Tiempo real: <Switch size="small" checked={false} />
+                                Tiempo real: <Switch size="small"/>
                             </FormItem>
                             <FormItem label="Limit show aircrafts">
-                                <Input size="small" placeholder="En vuelo 0" defaultValue="1000" />
+                                <Input type="number" min="0" size="small" placeholder="En vuelo 0" defaultValue={limit} onChange={event => limitAircrafts(event)} />
                             </FormItem>
                             <FormItem label="Country">
                                 <Input size="small" onChange={event => searchAircrafts(event)}/>
@@ -105,7 +105,8 @@ const mapStateToProps = state => {
     return {
         aircrafts: state.aircrafts,
         aircraftsInitial: state.aircraftsInitial,
-        load: state.load
+        load: state.load,
+        limit: state.limit
     };
 }
 

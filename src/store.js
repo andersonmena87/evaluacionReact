@@ -1,39 +1,49 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { AIRCRAFTS_SUCCESS, AIRCRAFTS_SEARCH, LOAD_PROGRESS } from './constants/const';
+import * as consts from './constants/const';
 
 const initialState = {
   aircrafts: [],
   aircraftsInitial: [],
   load: false,
+  limit:1000
 }
 
 const reducer = (state = initialState, action) => {
 
   switch(action.type){
-    case AIRCRAFTS_SUCCESS: {
+    case consts.AIRCRAFTS_SUCCESS: {
       return {
         ...state,
         aircrafts: action.aircrafts,
-        aircraftsInitial: [...action.aircrafts],
+        aircraftsInitial: [...action.aircraftsInitial],
         load: false
       };
     }
 
-    case LOAD_PROGRESS: {
+    case consts.LOAD_PROGRESS: {
       return {
         ...state,
         load: true,
       }  
     }
 
-    case AIRCRAFTS_SEARCH: {
+    case consts.AIRCRAFTS_SEARCH: {
       return {
         ...state,
         aircrafts: action.aircrafts,
         load: false,
       }
     }
+
+    case consts.AIRCRAFTS_LIMIT: {
+      return {
+        ...state,
+        aircrafts: action.aircrafts,
+        load: false,
+      }
+    }
+
     default: {
       return state;
     }

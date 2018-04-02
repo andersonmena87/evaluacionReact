@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { AIRCRAFTS_SUCCESS, LOAD_PROGRESS, AIRCRAFTS_SEARCH } from './constants/const';
+import * as consts from './constants/const';
 
 const loadProgress = () => ({
-  type: LOAD_PROGRESS,
+  type: consts.LOAD_PROGRESS,
 })
 
-const loadAircrafts = () => dispacht => {
+const loadAircrafts = () => (dispacht, state) => {
   dispacht(loadProgress());
   return axios.get("https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json")
     .then(response => {
@@ -14,8 +14,9 @@ const loadAircrafts = () => dispacht => {
       });
 
       dispacht({
-        type: AIRCRAFTS_SUCCESS,
-        aircrafts: aircrafts,
+        type: consts.AIRCRAFTS_SUCCESS,
+        aircrafts: [...aircrafts].slice(0, state().limit),
+        aircraftsInitial: [...aircrafts]
       })
     });
 };
@@ -23,11 +24,20 @@ const loadAircrafts = () => dispacht => {
 
 const searchAircrafts = (event) => (dispacht, state) => {
   let aircrafts = [...state().aircraftsInitial];
-  const valor =  event.target.value;
+  const valor = event.target.value;
   dispacht({
-    type: AIRCRAFTS_SEARCH,
-    aircrafts: aircrafts.filter( arr => arr.Cou.includes(valor))
+    type: consts.AIRCRAFTS_SEARCH,
+    aircrafts: aircrafts.filter(arr => arr.Cou.includes(valor))
   });
 };
 
-export { loadAircrafts, searchAircrafts };
+const limitAircrafts = (event) => (dispacht, state) => {
+  let aircrafts = [...state().aircraftsInitial];
+  const valor = event.target.value;
+  dispacht({
+    type: consts.AIRCRAFTS_LIMIT,
+    aircrafts: aircrafts.slice(0, valor)
+  });
+};
+
+export { loadAircrafts, searchAircrafts, limitAircrafts };
