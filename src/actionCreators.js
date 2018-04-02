@@ -21,19 +21,13 @@ const loadAircrafts = () => dispacht => {
 };
 
 
-const searchAircrafts = (event, aircrafts) => dispacht => {
+const searchAircrafts = (event) => (dispacht, state) => {
+  let aircrafts = [...state().aircraftsInitial];
   const valor =  event.target.value;
-  if(valor){
-    aircrafts = aircrafts.filter( arr => arr.Cou.includes(valor));
-  
-    dispacht({
-      type: AIRCRAFTS_SEARCH,
-      aircrafts: aircrafts
-    })
-  }else{
-    loadAircrafts();
-  }
-  
+  dispacht({
+    type: AIRCRAFTS_SEARCH,
+    aircrafts: aircrafts.filter( arr => arr.Cou.includes(valor))
+  });
 };
 
 export { loadAircrafts, searchAircrafts };

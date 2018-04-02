@@ -4,6 +4,7 @@ import { AIRCRAFTS_SUCCESS, AIRCRAFTS_SEARCH, LOAD_PROGRESS } from './constants/
 
 const initialState = {
   aircrafts: [],
+  aircraftsInitial: [],
   load: false,
 }
 
@@ -14,6 +15,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         aircrafts: action.aircrafts,
+        aircraftsInitial: [...action.aircrafts],
         load: false
       };
     }
@@ -32,9 +34,10 @@ const reducer = (state = initialState, action) => {
         load: false,
       }
     }
+    default: {
+      return state;
+    }
   }
-
-  return state;
 }
 
 const logger = store => next => action => {
