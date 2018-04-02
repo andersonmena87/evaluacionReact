@@ -46,7 +46,7 @@ const colorPoint = alture => {
     return color;
 }
 
-const Home = ({ aircrafts, load, loadAircrafts }) => {
+const Home = ({ aircrafts, load, loadAircrafts, searchAircrafts}) => {
     return (
         <Layout>
             <Header><StyledHeader>Evaluación</StyledHeader></Header>
@@ -67,7 +67,7 @@ const Home = ({ aircrafts, load, loadAircrafts }) => {
                                 <Input size="small" placeholder="En vuelo 0" defaultValue="1000" />
                             </FormItem>
                             <FormItem label="Country">
-                                <Input size="small" />
+                                <Input size="small" onChange={event => searchAircrafts(event, aircrafts)}/>
                             </FormItem>
                         </Col>
                     </Row>

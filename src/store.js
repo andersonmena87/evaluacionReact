@@ -8,28 +8,29 @@ const initialState = {
 }
 
 const reducer = (state = initialState, action) => {
-  if (action.type === AIRCRAFTS_SUCCESS) {
-    return {
-      ...state,
-      aircrafts: action.aircrafts,
-      load: false
-    };
-  } else if (action.type === AIRCRAFTS_SEARCH) {
-    let count = 0;
-    return {
-      ...state,
-      aircrafts: action.aircrafts.filter((arr) => {
-        if (arr.Lat && arr.Long && arr.Id) {
-          count++;
-        }
-        return arr.Lat && arr.Long && arr.Id && count < 1001;
-      }),
-      load: false
+
+  switch(action.type){
+    case AIRCRAFTS_SUCCESS: {
+      return {
+        ...state,
+        aircrafts: action.aircrafts,
+        load: false
+      };
     }
-  }else if(action.type === LOAD_PROGRESS){
-    return {
-      ...state,
-      load: true,
+
+    case LOAD_PROGRESS: {
+      return {
+        ...state,
+        load: true,
+      }  
+    }
+
+    case AIRCRAFTS_SEARCH: {
+      return {
+        ...state,
+        aircrafts: action.aircrafts,
+        load: false,
+      }
     }
   }
 
