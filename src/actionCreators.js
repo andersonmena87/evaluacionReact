@@ -31,7 +31,7 @@ const searchAircrafts = (event) => (dispacht, state) => {
   });
 };
 
-const limitAircrafts = (event) => (dispacht, state) => {
+const limitAircrafts = event => (dispacht, state) => {
   let aircrafts = [...state().aircraftsInitial];
   const valor = event.target.value;
   dispacht({
@@ -40,4 +40,13 @@ const limitAircrafts = (event) => (dispacht, state) => {
   });
 };
 
-export { loadAircrafts, searchAircrafts, limitAircrafts };
+let setIntervalFunction;
+
+const reloadAircrafts = cheked => dispacht => {
+  clearInterval(setIntervalFunction);
+  if(cheked){
+    setIntervalFunction = setInterval(() => dispacht(loadAircrafts()), 5000);
+  }
+}
+
+export { loadAircrafts, searchAircrafts, limitAircrafts, reloadAircrafts };
