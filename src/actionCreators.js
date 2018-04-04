@@ -9,25 +9,31 @@ const loadAircrafts = () => (dispacht, state) => {
   dispacht(loadProgress());
   return axios.get("https://public-api.adsbexchange.com/VirtualRadar/AircraftList.json")
     .then(response => {
-      const aircrafts = response.data.acList.filter(arr => {
+      let aircrafts = response.data.acList.filter(arr => {
         return arr.Lat && arr.Long && arr.Id;
       });
+
+      const aircraftsInitial = [...aircrafts];
+
+      aircrafts = aircrafts.filter(arr => arr.Cou.includes(state().country))
 
       dispacht({
         type: consts.AIRCRAFTS_SUCCESS,
         aircrafts: [...aircrafts].slice(0, state().limit),
-        aircraftsInitial: [...aircrafts]
+        aircraftsInitial: aircraftsInitial
       })
     });
 };
 
 
-const searchAircrafts = (event) => (dispacht, state) => {
+const searchAircrafts = event => (dispacht, state) => {
   let aircrafts = [...state().aircraftsInitial];
   const valor = event.target.value;
+  aircrafts = aircrafts.filter(arr => arr.Cou.includes(valor)).slice(0, state().limit);
   dispacht({
     type: consts.AIRCRAFTS_SEARCH,
-    aircrafts: aircrafts.filter(arr => arr.Cou.includes(valor))
+    aircrafts: aircrafts,
+    country: valor
   });
 };
 
@@ -36,7 +42,8 @@ const limitAircrafts = event => (dispacht, state) => {
   const valor = event.target.value;
   dispacht({
     type: consts.AIRCRAFTS_LIMIT,
-    aircrafts: aircrafts.slice(0, valor)
+    aircrafts: aircrafts.slice(0, valor),
+    limit: valor
   });
 };
 

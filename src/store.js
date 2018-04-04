@@ -5,6 +5,7 @@ import * as consts from './constants/const';
 const initialState = {
   aircrafts: [],
   aircraftsInitial: [],
+  country:"",
   load: false,
   limit:1000
 }
@@ -32,6 +33,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         aircrafts: action.aircrafts,
+        country: action.country,
         load: false,
       }
     }
@@ -40,6 +42,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         aircrafts: action.aircrafts,
+        limit: action.limit,
         load: false,
       }
     }

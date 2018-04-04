@@ -46,7 +46,7 @@ const colorPoint = alture => {
     return color;
 }
 
-const Home = ({ aircrafts, aircraftsInitial, load, loadAircrafts, searchAircrafts, limitAircrafts, reloadAircrafts, limit}) => {
+const Home = ({ aircrafts, aircraftsInitial, load, loadAircrafts, searchAircrafts, limitAircrafts, reloadAircrafts, limit, country}) => {
     return (
         <Layout>
             <Header><StyledHeader>Evaluación</StyledHeader></Header>
@@ -106,7 +106,8 @@ const mapStateToProps = state => {
         aircrafts: state.aircrafts,
         aircraftsInitial: state.aircraftsInitial,
         load: state.load,
-        limit: state.limit
+        limit: state.limit,
+        country: state.country
     };
 }
 
