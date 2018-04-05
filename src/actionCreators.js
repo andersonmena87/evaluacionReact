@@ -30,6 +30,7 @@ const searchAircrafts = event => (dispacht, state) => {
   let aircrafts = [...state().aircraftsInitial];
   const valor = event.target.value;
   aircrafts = aircrafts.filter(arr => arr.Cou.includes(valor)).slice(0, state().limit);
+
   dispacht({
     type: consts.AIRCRAFTS_SEARCH,
     aircrafts: aircrafts,
@@ -40,9 +41,11 @@ const searchAircrafts = event => (dispacht, state) => {
 const limitAircrafts = event => (dispacht, state) => {
   let aircrafts = [...state().aircraftsInitial];
   const valor = event.target.value;
+  aircrafts = aircrafts.filter(arr => arr.Cou.includes(state().country)).slice(0, valor);
+
   dispacht({
     type: consts.AIRCRAFTS_LIMIT,
-    aircrafts: aircrafts.slice(0, valor),
+    aircrafts: aircrafts,
     limit: valor
   });
 };
@@ -52,7 +55,7 @@ let setIntervalFunction;
 const reloadAircrafts = cheked => dispacht => {
   clearInterval(setIntervalFunction);
   if(cheked){
-    setIntervalFunction = setInterval(() => dispacht(loadAircrafts()), 5000);
+    setIntervalFunction = setInterval(() => dispacht(loadAircrafts()), 20000);
   }
 }
 
